@@ -1,174 +1,51 @@
+
 //package notepad;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import javax.swing.*;
-import java.io.*;
-import javax.swing.filechooser.*;
 
-public class Notepad extends JFrame implements ActionListener {
-
-    private JTextArea area;
-    private JScrollPane scpane;
+public class About extends JFrame implements ActionListener{
+	
+    JButton b1;
     
-    String text = "";
+    About(){
+        setBounds(600, 200, 700,600);// dimensions of view port for prompting the about window
+        setLayout(null);
+        
+        ImageIcon i1 = new ImageIcon(ClassLoader.getSystemResource("notepad/icons/windows.png"));
+        Image i2 = i1.getImage().getScaledInstance(400, 80, Image.SCALE_DEFAULT); //image placement through coordinates
+        ImageIcon i3 = new ImageIcon(i2);
+        JLabel l1 = new JLabel(i3);
+        l1.setBounds(150, 40, 400, 80); 
+        add(l1);
+        
+        ImageIcon i4 = new ImageIcon(ClassLoader.getSystemResource("notepad/icons/notepad.png"));
+        Image i5 = i4.getImage().getScaledInstance(70, 70, Image.SCALE_DEFAULT);
+        ImageIcon i6 = new ImageIcon(i5);
+        JLabel l2 = new JLabel(i6);
+        l2.setBounds(50, 180, 70, 70);
+        add(l2);
+        
+        
+        JLabel l3 = new JLabel("<html><br>Notepad is a word processing program, <br>which allows changing of text in a computer file.<br>Notepad is a simple text editor for basic text-editing program<br> which enables computer users to create documents. </html>");
+        l3.setFont(new Font("SAN_SERIF", Font.PLAIN, 18)); // font family and its size
+        l3.setBounds(150, 130, 500, 300);
+        add(l3);
+        
+        b1 = new JButton("OK");       // ok label and its coordinates for deploying inside window
+        b1.setBounds(580, 500, 80, 25);
+        b1.addActionListener(this);
+        add(b1);
+        
+    }
     
-    public Notepad() {
-    	
-        super("Notepad");
-        setSize(750, 750);
-        
-        setLayout(new BorderLayout());
-
-        JMenuBar menuBar = new JMenuBar(); //menubar
-        
-        JMenu file = new JMenu("File"); //file menu
-        
-        JMenuItem newdoc = new JMenuItem("New");
-        newdoc.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, ActionEvent.CTRL_MASK));// to work key shortcuts like ctrl+N
-        newdoc.addActionListener(this);
-        
-        JMenuItem open = new JMenuItem("Open");
-        open.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));
-        open.addActionListener(this);
-        
-        JMenuItem save = new JMenuItem("Save");
-        save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
-        save.addActionListener(this);
-        
-        JMenuItem print = new JMenuItem("Print");
-        print.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, ActionEvent.CTRL_MASK));
-        print.addActionListener(this);
-        
-        JMenuItem exit = new JMenuItem("Exit");
-        exit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0));
-        exit.addActionListener(this);
-        
-        JMenu edit = new JMenu("Edit");
-        
-        JMenuItem copy = new JMenuItem("Copy");
-        copy.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, ActionEvent.CTRL_MASK));
-        copy.addActionListener(this);
-        
-        JMenuItem paste = new JMenuItem("Paste");
-        paste.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, ActionEvent.CTRL_MASK));
-        paste.addActionListener(this);
-        
-        JMenuItem cut = new JMenuItem("Cut");
-        cut.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, ActionEvent.CTRL_MASK));
-        cut.addActionListener(this);
-        
-        JMenuItem selectall = new JMenuItem("Select All");
-        selectall.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, ActionEvent.CTRL_MASK));
-        selectall.addActionListener(this);
-        
-        
-        JMenu about = new JMenu("Help");
-        
-        JMenuItem notepad = new JMenuItem("About Notepad");
-        notepad.addActionListener(this);
-        
-        area = new JTextArea();
-        area.setFont(new Font("SAN_SERIF", Font.PLAIN, 20));
-        area.setLineWrap(true);
-        area.setWrapStyleWord(true);
-        
-        scpane = new JScrollPane(area); 
-        scpane.setBorder(BorderFactory.createEmptyBorder());
-        
-        setJMenuBar(menuBar);
-        menuBar.add(file);
-        menuBar.add(edit);
-        menuBar.add(about);
-
-        file.add(newdoc);
-        file.add(open);
-        file.add(save);
-        file.add(print);
-        file.add(exit);
-        
-        edit.add(copy);
-        edit.add(paste);
-        edit.add(cut);
-        edit.add(selectall);
-        
-        about.add(notepad);
-
-        add(scpane, BorderLayout.CENTER);
-        setVisible(true);
+    public void actionPerformed(ActionEvent ae){
+        this.setVisible(false);
     }
-
-    public void actionPerformed(ActionEvent ae) {
-    	
-        if (ae.getActionCommand().equals("New")) {
-            area.setText("");
-        
-        } else if (ae.getActionCommand().equals("Open")) {
-            JFileChooser chooser = new JFileChooser("D:/Java");
-            chooser.setAcceptAllFileFilterUsed(false); 
-            FileNameExtensionFilter restrict = new FileNameExtensionFilter("Only .txt files", "txt"); 
-            chooser.addChoosableFileFilter(restrict);
-    	
-            int result = chooser.showOpenDialog(this);
-            if(result == JFileChooser.APPROVE_OPTION) {
-                File file = chooser.getSelectedFile();
-				
-                try{
-                    System.out.println("HEki");
-                    FileReader reader = new FileReader(file);
-                    BufferedReader br = new BufferedReader(reader);
-                    area.read( br, null );
-                    br.close();
-                    area.requestFocus();
-                }catch(Exception e){
-                    System.out.print(e);
-                }
-            }
-            
-        } else if(ae.getActionCommand().equals("Save")){   // == save as
-            final JFileChooser SaveAs = new JFileChooser();
-            SaveAs.setApproveButtonText("Save");
-            int actionDialog = SaveAs.showOpenDialog(this);
-            if (actionDialog != JFileChooser.APPROVE_OPTION) {
-                return;
-            }
-
-            File fileName = new File(SaveAs.getSelectedFile() + ".txt");
-            BufferedWriter outFile = null;
-            try {
-                outFile = new BufferedWriter(new FileWriter(fileName));
-                area.write(outFile);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }else if(ae.getActionCommand().equals("Print")){
-            try{
-                area.print();
-            }catch(Exception e){}
-            
-        }else if (ae.getActionCommand().equals("Exit")) {
-            System.exit(0);
-            
-        }else if (ae.getActionCommand().equals("Copy")) {
-            text = area.getSelectedText();
-            
-        }else if (ae.getActionCommand().equals("Paste")) {
-            area.insert(text, area.getCaretPosition());
-            
-        }else if (ae.getActionCommand().equals("Cut")) {
-            text = area.getSelectedText();
-            area.replaceRange("", area.getSelectionStart(), area.getSelectionEnd());
-        }
-        else if (ae.getActionCommand().equals("Select All")) {
-            area.selectAll();
-        }else if (ae.getActionCommand().equals("About Notepad")) {
-            new About().setVisible(true);
-            
-        }
-    }
-
-    public static void main(String[] args) {
-        new Notepad();
+    
+    public static void main(String[] args){
+        new About().setVisible(true);
     }
 }
 
