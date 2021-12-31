@@ -1,4 +1,4 @@
-package notepad;
+//package notepad;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -10,8 +10,11 @@ public class Notepad extends JFrame implements ActionListener {
 
     private JTextArea area;
     private JScrollPane scpane;
+    
     String text = "";
+    
     public Notepad() {
+    	
         super("Notepad");
         setSize(750, 750);
         
@@ -96,6 +99,7 @@ public class Notepad extends JFrame implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent ae) {
+    	
         if (ae.getActionCommand().equals("New")) {
             area.setText("");
         
@@ -120,6 +124,7 @@ public class Notepad extends JFrame implements ActionListener {
                     System.out.print(e);
                 }
             }
+            
         } else if(ae.getActionCommand().equals("Save")){   // == save as
             final JFileChooser SaveAs = new JFileChooser();
             SaveAs.setApproveButtonText("Save");
@@ -140,16 +145,21 @@ public class Notepad extends JFrame implements ActionListener {
             try{
                 area.print();
             }catch(Exception e){}
+            
         }else if (ae.getActionCommand().equals("Exit")) {
             System.exit(0);
+            
         }else if (ae.getActionCommand().equals("Copy")) {
             text = area.getSelectedText();
+            
         }else if (ae.getActionCommand().equals("Paste")) {
             area.insert(text, area.getCaretPosition());
+            
         }else if (ae.getActionCommand().equals("Cut")) {
             text = area.getSelectedText();
             area.replaceRange("", area.getSelectionStart(), area.getSelectionEnd());
-        }else if (ae.getActionCommand().equals("Select All")) {
+        }
+        else if (ae.getActionCommand().equals("Select All")) {
             area.selectAll();
         }else if (ae.getActionCommand().equals("About Notepad")) {
             new About().setVisible(true);
@@ -161,3 +171,4 @@ public class Notepad extends JFrame implements ActionListener {
         new Notepad();
     }
 }
+
